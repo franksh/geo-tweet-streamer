@@ -1,0 +1,7 @@
+nohup.out
+config.mine.ini
+log/
+data/
+venv/
+__pycache__/
+*.pyc

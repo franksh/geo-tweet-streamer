@@ -19,9 +19,6 @@ if __name__ == '__main__':
     config.readfp(f)
     f.close()
 
-    import pdb
-    pdb.set_trace()
-
     # Create listener and start streaming
     listener = GeoTweetListener(config=config)
     listener.start_streaming()

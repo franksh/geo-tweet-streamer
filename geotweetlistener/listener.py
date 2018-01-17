@@ -109,16 +109,16 @@ class GeoTweetListener(StreamListener):
         lon = location[0]
         lat = location[1]
 
-        if self.config['database']['database_type'] == 'mysql':
+        if self.config.get('database', 'database_type') == 'mysql':
             created_datetime = datetime.strptime(created_at,
                                                  '%a %b %d %H:%M:%S +0000 %Y')
             tweet = Tweet(created_at=created_datetime, user_id=user_id,
                           tweet_id=tweet_id, lat=lat, lon=lon)
             tweet.save()
 
-        elif self.config['database']['database_type'] == 'csv':
+        elif self.config.get('database', 'database_type') == 'csv':
             save_data = [created_at, user_id, tweet_id, lat, lon]
-            csv_path = os.path.join(self.config['database']['csv_path'], '')
+            csv_path = os.path.join(self.config.get('database', 'csv_path'), '')
             save_file = open(csv_path + 'tweets_data.csv',
                              'a', encoding='utf-8')
             save_file.write(';'.join([str(i) for i in save_data]))
@@ -133,7 +133,7 @@ class GeoTweetListener(StreamListener):
         consumer_key = self.config.get('twitter', 'consumer_key')
         consumer_secret = self.config.get('twitter', 'consumer_secret')
         access_token = self.config.get('twitter', 'access_token')
-        access_token_secret = self.config.get('twitter', 'acccess_token_secret')
+        access_token_secret = self.config.get('twitter', 'access_token_secret')
 
         auth = OAuthHandler(consumer_key, consumer_secret)
         auth.set_access_token(access_token, access_token_secret)
