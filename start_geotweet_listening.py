@@ -1,12 +1,15 @@
-#!/usr/bin/python3
 if __name__ == '__main__':
     """ Run this script to start the Streaming """
     import os
+
     # Load config
-    # import configparser
-    # config = configparser.ConfigParser()
-    import ConfigParser
-    config = ConfigParser.ConfigParser()
+    try:
+        # python 2.7
+        from ConfigParser import ConfigParser
+    except:
+        # python 3
+        from configparser import ConfigParser
+    config = ConfigParser()
 
     from geotweetlistener import GeoTweetListener
 
@@ -15,7 +18,6 @@ if __name__ == '__main__':
         f = open('config.mine.ini')
     else:
         f = open('config.ini')
-    # config.read_file(f)
     config.readfp(f)
     f.close()
 
