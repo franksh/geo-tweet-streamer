@@ -63,7 +63,8 @@ class GeoTweetListener(StreamListener):
         conn = pymysql.connect(host=host, user=user,
                                password=password)
 
-        conn.cursor().execute('CREATE DATABASE IF NOT EXISTS {}'.format(dbname))
+        conn.cursor().execute(
+            'CREATE DATABASE IF NOT EXISTS {}'.format(dbname))
         conn.close()
 
         # Initialize database and create tweet table

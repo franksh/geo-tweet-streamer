@@ -26,7 +26,7 @@ is set up correctly (see Configuration below).
 To start streaming, execute the script ```start_geotweet_listening.py```.
 The script will start listening to the Twitter API.
 It will save all geolocated Tweets in
-the specified geographic region the format:
+the specified geographic region in the format:
 
 | created_at | user_id | tweet_id | latitude | longitude |
 
