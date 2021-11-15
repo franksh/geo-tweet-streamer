@@ -5,6 +5,7 @@ from datetime import datetime
 import peewee
 import pymysql
 from tweepy import Stream
+from tweepy.api import API
 from tweepy.streaming import StreamListener
 from tweepy.auth import OAuthHandler
 
@@ -15,14 +16,15 @@ database = peewee.MySQLDatabase(None)
 
 class GeoTweetListener(StreamListener):
 
-    def __init__(self, config):
+    def __init__(self, config, no_streaming=False):
 
         self.config = config
         self.database = database
 
         # Initialize
         self._initialize_logging()
-        self._initialize_output()
+        if not no_streaming:
+            self._initialize_output()
 
     def _initialize_logging(self):
         """ Set up logging to file """
@@ -145,6 +147,20 @@ class GeoTweetListener(StreamListener):
         # Start stream
         stream = Stream(auth, self)
         stream.filter(locations=bounding_box)
+
+    def get_api(self):
+        """ Returns an tweepy.API object, which allows manual calls to the
+        Twitter API """
+        consumer_key = self.config.get('twitter', 'consumer_key')
+        consumer_secret = self.config.get('twitter', 'consumer_secret')
+        access_token = self.config.get('twitter', 'access_token')
+        access_token_secret = self.config.get('twitter', 'access_token_secret')
+
+        auth = OAuthHandler(consumer_key, consumer_secret)
+        auth.set_access_token(access_token, access_token_secret)
+
+        api = API(auth)
+        return api
 
 
 class Tweet(peewee.Model):

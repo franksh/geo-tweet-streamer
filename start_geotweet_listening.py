@@ -1,6 +1,15 @@
 if __name__ == '__main__':
     """ Run this script to start the Streaming """
     import os
+    import sys
+
+    # Check if process if already running
+    pid = str(os.getpid())
+    pidfile = "/tmp/tweetstreaming.pid"
+    if os.path.isfile(pidfile):
+        # If file already exists, exit
+        print("pid File exists")
+        sys.exit()
 
     # Load config
     try:
@@ -21,6 +30,14 @@ if __name__ == '__main__':
     config.readfp(f)
     f.close()
 
-    # Create listener and start streaming
-    listener = GeoTweetListener(config=config)
-    listener.start_streaming()
+    # Write pidfile to register process and start streaming
+    with open(pidfile, 'w') as f:
+        f.write(pid)
+        f.close()
+
+    try:
+        # Create listener and start streaming
+        listener = GeoTweetListener(config=config)
+        listener.start_streaming()
+    finally:
+        os.unlink(pidfile)
